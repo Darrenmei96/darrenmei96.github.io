@@ -1,68 +1,66 @@
 <script>
-  import { onMount } from 'svelte';
-  import confetti from 'canvas-confetti';
+  import { onMount } from "svelte";
+  import confetti from "canvas-confetti";
 
   let yesPressed = false;
-  let noButtonText = "No";
-  let noButtonStyle = "";
-  
+  let noCount = 0;
+
   function handleYes() {
     yesPressed = true;
     confetti({
       particleCount: 100,
       spread: 70,
-      origin: { y: 0.6 }
+      origin: { y: 0.6 },
     });
   }
 
-  function handleNoHover() {
-    noButtonText = "Yes";
-    // Optional: make it look exactly like the Yes button
-    noButtonStyle = "background-color: #ff3e00; transform: scale(1.1);";
-  }
-
-  function handleNoLeave() {
-    // Optional: revert capability? 
-    // The user said "turn into a yes", usually implies permanent or while interacting. 
-    // Let's keep it as Yes once hovered to ensure success :)
-    // or revert if they leave to be cheeky? 
-    // "When the no button is hovered over or pressed, it should turn into a yes"
-    // implies state change. Let's make it permanent for this session.
-  }
-
   function handleNoClick() {
-    handleYes();
+    noCount++;
   }
+
+  $: noButtonStyle = `transform: scale(${Math.max(0, 1 - noCount * 0.1)})`;
+  $: yesButtonStyle = `transform: scale(${1 + noCount * 0.2})`;
+  $: subTitle = noCount === 0 ? "Quack quack? 🦆" : "Quack... 😢";
 </script>
 
 <main>
   <div class="container">
     {#if yesPressed}
       <div class="celebration">
-        <h1 class="bounce">Yay! 💖</h1>
+        <h1 class="bounce">Chirp Chirp! Yay! 🐣</h1>
         <div class="gif-container">
-          <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QzM3MxM3MxM3MxM3MxM3MxM3MxM3MxM3MxMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" alt="Happy Cat" />
+          <!-- <img
+            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QzM3MxM3MxM3MxM3MxM3MxM3MxM3MxM3MxMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif"
+            alt="Happy Cat"
+          /> -->
+          <img
+            src="https://media.tenor.com/wcDQ5VaLa9MAAAAi/bubu-dudu.gif"
+            alt="Happy bubu"
+          />
         </div>
-        <p>You've made me the happiest person!</p>
+        <p>You've made me the happiest bird! 💖</p>
       </div>
     {:else}
       <div class="proposal">
         <div class="gif-container">
-           <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QzM3MxM3MxM3MxM3MxM3MxM3MxM3MxM3MxMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oriO0OEd9QIDdllqo/giphy.gif" alt="Cute begging" />
+          <!-- <img
+            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QzM3MxM3MxM3MxM3MxM3MxM3MxM3MxM3MxMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oriO0OEd9QIDdllqo/giphy.gif"
+            alt="Cute begging"
+          /> -->
+          <img
+            src="https://media.tenor.com/0cNM_9li440AAAAj/dudu-giving-flowers-bubu-flowers.gif"
+            alt="bubu give flowers"
+          />
         </div>
-        <h1>Will you be my Valentine?</h1>
+        <h1>Will you be my Valentine, Birdie?</h1>
+        <p class="subtitle">{subTitle}</p>
         <div class="buttons">
-          <button class="yes-btn" on:click={handleYes}>
+          <button class="yes-btn" style={yesButtonStyle} on:click={handleYes}>
             Yes
           </button>
-          
-          <button 
-            class="no-btn" 
-            style={noButtonStyle}
-            on:mouseenter={handleNoHover}
-            on:click={handleNoClick}
-          >
-            {noButtonText}
+
+          <button class="no-btn" style={noButtonStyle} on:click={handleNoClick}>
+            No
           </button>
         </div>
       </div>
@@ -74,7 +72,7 @@
   :global(body) {
     margin: 0;
     padding: 0;
-    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Playful font */
+    font-family: "Comic Sans MS", "Chalkboard SE", sans-serif; /* Playful font */
     background-color: #ffe6e6;
     display: flex;
     justify-content: center;
@@ -87,7 +85,7 @@
     background: white;
     padding: 2rem;
     border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     max-width: 90%;
     width: 400px;
   }
@@ -96,6 +94,13 @@
     color: #ff3366;
     margin-bottom: 2rem;
     font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 2rem;
+    font-style: italic;
   }
 
   .buttons {
@@ -117,10 +122,10 @@
   }
 
   .yes-btn {
-    background-color: #28a745; 
+    background-color: #28a745;
     color: white;
   }
-  
+
   .yes-btn:hover {
     transform: scale(1.1);
     box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
@@ -130,9 +135,9 @@
     background-color: #dc3545;
     color: white;
   }
-  
+
   /* When it becomes 'Yes' style via JS, we might want to match the green */
-  
+
   .gif-container img {
     width: 100%;
     max-height: 200px;
@@ -151,7 +156,11 @@
   }
 
   @keyframes bounce {
-    from { transform: translateY(0); }
-    to { transform: translateY(-10px); }
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-10px);
+    }
   }
 </style>
