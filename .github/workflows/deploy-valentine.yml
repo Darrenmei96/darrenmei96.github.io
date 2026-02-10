@@ -22,17 +22,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd valentine
           bun install
 
       - name: Build
         run: |
-          cd valentine
           bun run build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: valentine/dist
+          folder: dist
           branch: gh-pages
-          target-folder: valentine
