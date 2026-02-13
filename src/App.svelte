@@ -21,6 +21,13 @@
   $: noButtonStyle = `transform: scale(${Math.max(0, 1 - noCount * 0.1)})`;
   $: yesButtonStyle = `transform: scale(${1 + noCount * 0.2})`;
   $: subTitle = noCount === 0 ? "Quack quack? 🦆" : "Quack... 😢";
+
+  $: titleText =
+    noCount === 0
+      ? "Will you be my Valentine, Birdie?"
+      : "What about valentine and SUSHI? 🍣";
+
+  $: yesButtonText = noCount < 4 ? "Yes" : "Of Course! ❤️";
 </script>
 
 <main>
@@ -38,7 +45,7 @@
             alt="Happy bubu"
           />
         </div>
-        <p>You've made me the happiest bird! 💖</p>
+        <p>I knew you would say yes! 💖</p>
       </div>
     {:else}
       <div class="proposal">
@@ -52,11 +59,11 @@
             alt="bubu give flowers"
           />
         </div>
-        <h1>Will you be my Valentine, Birdie?</h1>
+        <h1>{titleText}</h1>
         <p class="subtitle">{subTitle}</p>
         <div class="buttons">
           <button class="yes-btn" style={yesButtonStyle} on:click={handleYes}>
-            Yes
+            {yesButtonText}
           </button>
 
           <button class="no-btn" style={noButtonStyle} on:click={handleNoClick}>
